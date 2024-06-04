@@ -1,0 +1,61 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class MedidasTendenciaCentral {
+
+    private List<Integer> data;
+
+    public MedidasTendenciaCentral(List<Integer> data) {
+        this.data = data;
+    }
+
+    public double calcularMedia() {
+        int suma = 0;
+        for (int dato : data) {
+            suma += dato;
+        }
+        return suma / (double)data.size();
+    }
+
+    public double calcularMediana() {
+        Collections.sort(data);
+        int n = data.size();
+        if (n % 2 == 0) {
+            int medio1 = n / 2 - 1;
+            int medio2 = n / 2;
+            return ((double)data.get(medio1) + data.get(medio2)) / 2;
+        } else {
+            int medio = n / 2;
+            return data.get(medio);
+        }
+    }
+
+    public List<Integer> calcularModa() {
+        List<Integer> moda = new ArrayList<>();
+        int maxFrecuencia = 0;
+
+        for (int dato : data) {
+            int frecuencia = Collections.frequency(data, dato);
+            if (frecuencia > maxFrecuencia) {
+                moda.clear();
+                moda.add(dato);
+                maxFrecuencia = frecuencia;
+            } else if (frecuencia == maxFrecuencia && !moda.contains(dato)) {
+                moda.add(dato);
+            }
+        }
+
+        return moda;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> data = new ArrayList<>();
+        Collections.addAll(data, 38,15,10,12,62,46,25,56,27,24,23,21,20,25,38,27,48,35,50,65,59,58,47,42,37,35,32,40,28,14,12,24,66,73,72,70,68,65,54,48,34,33,21,19,61,59,47,46,30,30 );
+        MedidasTendenciaCentral medidas = new MedidasTendenciaCentral(data);
+
+        System.out.println("MEDIA: " + medidas.calcularMedia());
+        System.out.println("MEDIANA: " + medidas.calcularMediana());
+        System.out.println("MODA: " + medidas.calcularModa());
+    }
+}
