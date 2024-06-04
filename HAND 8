@@ -1,0 +1,78 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Permutations {
+    public static void main(String[] args) {
+
+        char[] arr = {'A', 'B', 'C'};
+
+
+        System.out.println("Permutaciones del arreglo: ");
+        List<String> permutations = getPermutations(arr);
+        for (String permutation : permutations) {
+            System.out.println(permutation);
+        }
+
+
+        int[][] dataset = {
+                {7, 1},
+                {2, 6}
+        };
+
+        System.out.println("\nProbabilidades:");
+        calculateProbabilities(dataset);
+    }
+
+
+    private static List<String> getPermutations(char[] arr) {
+        List<String> permutations = new ArrayList<>();
+        getPermutations("", arr, permutations);
+        return permutations;
+    }
+
+
+    private static void getPermutations(String prefix, char[] arr, List<String> permutations) {
+        if (arr.length == 0) {
+            permutations.add(prefix);
+        } else {
+            for (int i = 0; i < arr.length; i++) {
+                char[] newArr = new char[arr.length - 1];
+                System.arraycopy(arr, 0, newArr, 0, i);
+                System.arraycopy(arr, i + 1, newArr, i, arr.length - i - 1);
+                getPermutations(prefix + arr[i], newArr, permutations);
+            }
+        }
+    }
+
+
+    private static void calculateProbabilities(int[][] dataset) {
+        int totalDays = 0;
+        int cloudy = 0, notCloudy = 0, rain = 0, noRain = 0;
+
+        for (int[] row : dataset) {
+            totalDays += row[0] + row[1];
+            cloudy += row[0];
+            noRain += row[1];
+        }
+
+        notCloudy = totalDays - cloudy;
+        rain = totalDays - noRain;
+
+        System.out.println("Probabilidad Marginal:");
+        System.out.println("P(Nublado) = " + (double) cloudy / totalDays);
+        System.out.println("P(No Nublado) = " + (double) notCloudy / totalDays);
+        System.out.println("P(Llueve) = " + (double) rain / totalDays);
+        System.out.println("P(No Llueve) = " + (double) noRain / totalDays);
+
+        System.out.println("\nProbabilidad Conjunta:");
+        System.out.println("P(Nublado y Llueve) = " + (double) dataset[0][0] / totalDays);
+        System.out.println("P(No Nublado y No Llueve) = " + (double) dataset[1][1] / totalDays);
+
+        System.out.println("\nProbabilidad Condicional:");
+        System.out.println("P(Llueve | Nublado) = " + (double) dataset[0][0] / cloudy);
+        System.out.println("P(Llueve | No Nublado) = " + (double) dataset[0][1] / notCloudy);
+        System.out.println("P(No Llueve | Nublado) = " + (double) dataset[1][0] / cloudy);
+        System.out.println("P(No Llueve | No Nublado) = " + (double) dataset[1][1] / notCloudy);
+        System.out.println("P(Nublado | Llueve) = " + (double) dataset[0][0] / rain);
+        System.out.println("P(Nublado | No Llueve) = " + (double) dataset[1][0] / noRain);
+    }
